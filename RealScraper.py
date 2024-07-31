@@ -3,11 +3,13 @@ import os
 import requests
 import io
 from PIL import Image
+from dotenv import load_dotenv
+load_dotenv()
 
-
-searchterm = 'Zendaya'#input your search item here
+driver_path = os.getenv('driver_path')
+searchterm = 'Zendaya' #input your search item here
 url = "https://www.google.co.in/search?q="+searchterm+"&source=lnms&tbm=isch"
-browser = webdriver.Chrome() #insert path to chromedriver inside parentheses
+browser = webdriver.Chrome("/Users/ishaan/Documents/Code/HaircutCV/chromedriver") #insert path to chromedriver inside parentheses
 browser.get(url)
 img_count = 0
 extensions = { "jpg", "jpeg", "png", "gif" }
@@ -41,5 +43,7 @@ def download_image(download_path, url, file_name):
 for idx, link in enumerate(images):
       download_image("", link, f'Zendaya{idx}.jpg')
 
+
 print("Success :)")
 
+browser.quit()
