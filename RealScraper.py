@@ -9,7 +9,7 @@ load_dotenv()
 driver_path = os.getenv('driver_path')
 searchterm = 'Zendaya' #input your search item here
 url = "https://www.google.co.in/search?q="+searchterm+"&source=lnms&tbm=isch"
-browser = webdriver.Chrome("/Users/ishaan/Documents/Code/HaircutCV/chromedriver") #insert path to chromedriver inside parentheses
+browser = webdriver.Chrome(driver_path) #insert path to chromedriver inside parentheses
 browser.get(url)
 img_count = 0
 extensions = { "jpg", "jpeg", "png", "gif" }
