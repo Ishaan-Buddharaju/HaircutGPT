@@ -13,28 +13,30 @@ browser = webdriver.Chrome(driver_path) #insert path to chromedriver inside pare
 browser.get(url)
 img_count = 0
 extensions = { "jpg", "jpeg", "png", "gif" }
+
+
 if not os.path.exists(searchterm):
     os.mkdir(searchterm)
 
-for _ in range(500):
-    browser.execute_script("window.scrollBy(0,10000)")
+for t in range(500):  
+    browser.execute_script("window.scrollBy(0,10000)")  #scroll down to load images
     
-html = browser.page_source.split('["')
+html = browser.page_source.split('["')      #grabs html source of page
 images = []
 for i in html:
-    if i.startswith('http') and i.split('"')[0].split('.')[-1] in extensions:
-        images.append(i.split('"')[0])
+    if i.startswith('http') and i.split('"')[0].split('.')[-1] in extensions:   #checks if img by splitting and comparing if its one of the extensions
+        images.append(i.split('"')[0])   #adds image link to list "images"
 
 
-def download_image(download_path, url, file_name):
+def download_image(download_path, url, file_name):   #function to download an image provided the directory, img url, and desired file name
 	try:
 		image_content = requests.get(url).content
-		image_file = io.BytesIO(image_content)
-		image = Image.open(image_file)
+		image_file = io.BytesIO(image_content)    #takes content and converts to bytes
+		image = Image.open(image_file)              
 		file_path = download_path + file_name
 
 		with open(file_path, "wb") as f:
-			image.save(f, "JPEG")
+			image.save(f, "JPEG")           #saves image at the filepath as a jpg
 
 		print("Success")
 	except Exception as e:
