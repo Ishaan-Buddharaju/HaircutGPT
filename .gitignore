@@ -181,4 +181,4 @@ pyrightconfig.json
 
 # chromedriver
 chromedriver
-paths.env
+.env
