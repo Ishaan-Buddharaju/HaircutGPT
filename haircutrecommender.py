@@ -2,11 +2,12 @@ import os
 from dotenv import load_dotenv
 import openai
 
+# Load environment variables from .env file
+load_dotenv() 
+api_key = os.getenv("HAIRCUT_API_KEY")
+openai.api_key = api_key
+
 def get_hairstyle_recommendations(face_shape, desired_hair_length, gender):
-    # Load environment variables from .env file
-    load_dotenv()
-    api_key = os.getenv("HAIRCUT_API_KEY")
-    openai.api_key = api_key
     
     # Construct the prompt for the model
     prompt = f"""
