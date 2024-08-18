@@ -6,11 +6,13 @@ from sklearn.cluster import KMeans #for clustering
 import math
 from math import degrees
 
-#load the image (Image Paths are in MAC FORMATTING)
+#load the image that we are looking at the face shape for (Image Paths are in MAC FORMATTING)
 imagepath = "/Users/dhirennarne/workspace/FaceShape/i7.jpg"
-#haarcascade for detecting faces
+
+#haarcascade for detecting faces (Download: https://github.com/opencv-java/face-detection/blob/master/resources/lbpcascades/lbpcascade_frontalcatface.xml)
 face_cascade_path = "/Users/dhirennarne/workspace/FaceShape/lbpcascade_frontalcatface.xml"
-#.dat file path for detecting facial landmarks
+
+#.dat file path for detecting facial landmarks (Download: https://github.com/italojs/facial-landmarks-recognition/blob/master/shape_predictor_68_face_landmarks.dat)
 predictor_path = "/Users/dhirennarne/workspace/FaceShape/shape_predictor_68_face_landmarks.dat"
 
 #create the haar cascade for detecting face and smile
@@ -173,7 +175,7 @@ for (x, y, w, h) in faces:
             print('Oblong shape') #Face length is largest and jawlines are not angular')
         break
     else:
-      print("Dang something is wrong! Make sure to contact me and explain the issue!")
+      print("Something is wrong :( ! Make sure to contact me and explain the issue!")
  
 
 
