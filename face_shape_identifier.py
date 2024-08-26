@@ -156,27 +156,34 @@ for (x, y, w, h) in faces:
     if similarity < 10:
         if angle < 160:
             print('Squared shape') #Jawlines are more angular
+            faceShape = 'Squared shape'
         else:
             print('Round shape') #Jawlines are not that angular
+            faceShape = 'Round shape'
         break
     if line3 > line1:
         if angle < 160:
             print('Triangle shape') #Forehead is wider
+            faceShape = 'Triangle shape'
         else:
             print('Triangle shape') #Jawlines are more angular
+            faceShape = 'Triangle shape'
         break
     if ovalsimilarity < 10:
         print('Diamond shape') #Line 2 & Line 4 are similar and Line 2 is slightly larger
+        faceShape = 'Diamond shape'
         break
     if line4 > line2:
         if angle < 160:
             print('Rectangular shape') #Face length is largest and jawlines are angular
+            faceShape = 'Rectangular shape'
         else:
             print('Oblong shape') #Face length is largest and jawlines are not angular')
+            faceShape = 'Oblong Shape'
         break
     else:
       print("Something is wrong :( ! Make sure to contact me and explain the issue!")
- 
+
 
 
 # Show the result image
