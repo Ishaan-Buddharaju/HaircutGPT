@@ -9,7 +9,7 @@ from PIL import Image
 from dotenv import load_dotenv
 load_dotenv()
 
-driver_path = os.getenv('driver_path')
+DRIVER_PATH = os.getenv('driver_path')
 
 def create_folder(folder_name):
     if not os.path.exists(folder_name):
@@ -53,7 +53,7 @@ def download_image(folder_name, url, file_name):   #function to download an imag
             
 if __name__ == '__main__':
 
-    wd = webdriver.Chrome(driver_path)       #initialize webdriver
+    wd = webdriver.Chrome(DRIVER_PATH)       #initialize webdriver
     celebs = pd.read_csv("celebrities.csv")['Celebrity']  #read in celeb csv and column with celeb names
     face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")  #read face cascade once to be used to count faces
     for name in celebs:            
