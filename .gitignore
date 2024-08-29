@@ -182,3 +182,4 @@ pyrightconfig.json
 # chromedriver
 chromedriver
 .env
+test.ipynb
