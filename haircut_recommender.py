@@ -30,8 +30,8 @@ def get_hairstyle_recommendations(face_shape, desired_hair_length, gender):
 
 # Example usage
 if __name__ == "__main__":
-    face_shape = "Oblong"  # This would be inputted from model's analysis of face picture
-    gender = "Male"
+    face_shape = "Round"  # This would be inputted from model's analysis of face picture
+    gender = "Female"
     desired_hair_length = "Long"
     recommendations = get_hairstyle_recommendations(face_shape, desired_hair_length, gender)
     print("Recommendations for face shape '{}':".format(face_shape))
