@@ -41,24 +41,24 @@ class FaceShape:
 
     
     def classify_face_shape(self):
-        for (x, y, w, h) in faces:
+        for (x, y, w, h) in self.faces:
             #draw a rectangle around the faces
-            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(self.image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             #converting the opencv rectangle coordinates to Dlib rectangle
             dlib_rect = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
             #detecting landmarks
-            detected_landmarks = predictor(image, dlib_rect).parts()
+            detected_landmarks = self.predictor(self.image, dlib_rect).parts()
             #converting to np matrix
             landmarks = np.matrix([[p.x, p.y] for p in detected_landmarks])
     
         #making another copy for showing final results
-        results = original.copy()
+        results = self.original.copy()
 
-        for (x, y, w, h) in faces:
+        for (x, y, w, h) in self.faces:
             #draw a rectangle around the faces
             cv2.rectangle(results, (x, y), (x + w, y + h), (0, 255, 0), 2)
             #making temporary copy
-            temp = original.copy()
+            temp = self.original.copy()
             #getting area of interest from image i.e., forehead (25% of face)
             forehead = temp[y:y + int(0.25 * h), x:x + w]
             rows, cols, bands = forehead.shape
