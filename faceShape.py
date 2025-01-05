@@ -5,16 +5,16 @@ import dlib #for detection of facial landmarks ex:nose,jawline,eyes
 from sklearn.cluster import KMeans #for clustering
 import math
 from math import degrees
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 
-load_dotenv()
+# load_dotenv()
 
 
-# Paths
-image_path = os.getenv('IMAGE_PATH')
-face_cascade_path = os.getenv('FACE_CASCADE_PATH')
-predictor_path = os.getenv('PREDICTOR_PATH')
+# # Paths
+# image_path = os.getenv('IMAGE_PATH')
+# face_cascade_path = os.getenv('FACE_CASCADE_PATH')
+# predictor_path = os.getenv('PREDICTOR_PATH')
 
 class FaceShape: 
 
@@ -37,10 +37,11 @@ class FaceShape:
             flags=cv2.CASCADE_SCALE_IMAGE
             )
         self.num_faces = len(self.faces)
+        self.faceShape, self.measured_image = self._classify_face_shape()
         
 
     
-    def classify_face_shape(self):
+    def _classify_face_shape(self):
         for (x, y, w, h) in self.faces:
             #draw a rectangle around the faces
             cv2.rectangle(self.image, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -150,34 +151,36 @@ class FaceShape:
         # Determine face shape based on calculated metricsfor i inrange(1):
             if similarity < 10:
                 if angle < 160:
-                    print('Squared shape') #Jawlines are more angular
+                    #print('Squared shape') #Jawlines are more angular
                     faceShape = 'Squared shape'
                 else:
-                    print('Round shape') #Jawlines are not that angular
+                    #print('Round shape') #Jawlines are not that angular
                     faceShape = 'Round shape'
                 break
             if line3 > line1:
                 if angle < 160:
-                    print('Triangle shape') #Forehead is wider
+                    #print('Triangle shape') #Forehead is wider
                     faceShape = 'Triangle shape'
                 else:
-                    print('Triangle shape') #Jawlines are more angular
+                    #print('Triangle shape') #Jawlines are more angular
                     faceShape = 'Triangle shape'
                 break
             if ovalsimilarity < 10:
-                print('Diamond shape') #Line 2 & Line 4 are similar and Line 2 is slightly larger
+                #print('Diamond shape') #Line 2 & Line 4 are similar and Line 2 is slightly larger
                 faceShape = 'Diamond shape'
                 break
             if line4 > line2:
                 if angle < 160:
-                    print('Rectangular shape') #Face length is largest and jawlines are angular
+                    #print('Rectangular shape') #Face length is largest and jawlines are angular
                     faceShape = 'Rectangular shape'
                 else:
-                    print('Oblong shape') #Face length is largest and jawlines are not angular')
+                    #print('Oblong shape') #Face length is largest and jawlines are not angular')
                     faceShape = 'Oblong Shape'
                 break
             else:
-                print("Something is wrong :( ! Make sure to contact me and explain the issue!")
+                faceShape = 'Unable to determine shape'
         #returns string faceShape and resulting image 
         #results can be shown with cv2.imshow('Face Shape', results)
+        # self.faceShape = faceShape
+        # self.measured_image = results
         return faceShape, results     
