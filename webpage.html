@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        video, canvas {
+            display: block;
+            margin: 20px auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Camera Input</h1>
+    <video id="video" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <div>
+        <button id="capture">Capture Photo</button>
+        <button id="download" style="display:none;">Download Photo</button>
+    </div>
+    <script>
+        // Select HTML elements
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const downloadButton = document.getElementById('download');
+        const ctx = canvas.getContext('2d');
+
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error('Error accessing the camera:', err);
+            });
+
+        // Capture the photo
+        captureButton.addEventListener('click', () => {
+            canvas.style.display = 'block';
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            downloadButton.style.display = 'inline-block';
+        });
+
+        // Download the captured photo
+        downloadButton.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'captured-photo.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
