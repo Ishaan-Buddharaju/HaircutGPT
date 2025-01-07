@@ -31,14 +31,14 @@
         <button id="download" style="display:none;">Download Photo</button>
     </div>
     <script>
-        // Select HTML elements
+        //select HTML elements
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
         const downloadButton = document.getElementById('download');
         const ctx = canvas.getContext('2d');
 
-        // Access the camera
+        //access the camera
         navigator.mediaDevices.getUserMedia({ video: true })
             .then((stream) => {
                 video.srcObject = stream;
@@ -47,14 +47,14 @@
                 console.error('Error accessing the camera:', err);
             });
 
-        // Capture the photo
+        //capture the photo
         captureButton.addEventListener('click', () => {
             canvas.style.display = 'block';
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             downloadButton.style.display = 'inline-block';
         });
 
-        // Download the captured photo
+        //download the captured photo
         downloadButton.addEventListener('click', () => {
             const link = document.createElement('a');
             link.download = 'captured-photo.png';
