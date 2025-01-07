@@ -1,4 +1,4 @@
-from FaceShape import FaceShape
+from faceShape import FaceShape
 from dotenv import load_dotenv
 import os
 load_dotenv()
