@@ -35,7 +35,7 @@
         <input type="file" id="imageUpload" accept="image/*">
     </div>
     <script>
-        // Select HTML elements
+        //select HTML elements
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
@@ -43,7 +43,11 @@
         const imageUpload = document.getElementById('imageUpload');
         const ctx = canvas.getContext('2d');
 
-        // Access the camera
+        //variables to store raw image data
+        let capturedImageData = null; //for image taken from camera
+        let uploadedImageData = null; //for image
+
+        //access the camera
         navigator.mediaDevices.getUserMedia({ video: true })
             .then((stream) => {
                 video.srcObject = stream;
@@ -52,11 +56,15 @@
                 console.error('Error accessing the camera:', err);
             });
 
-        // Capture the photo
+        //capture the photo
         captureButton.addEventListener('click', () => {
             canvas.style.display = 'block';
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             downloadButton.style.display = 'inline-block';
+
+            // Collect and store raw image data
+            capturedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            console.log('Captured Image Data:', capturedImageData.data); //logs raw pixel data
         });
 
         // Download the captured photo
@@ -78,6 +86,10 @@
                         canvas.style.display = 'block';
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         downloadButton.style.display = 'inline-block';
+
+                        // Collect and store raw image data
+                        uploadedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        console.log('Uploaded Image Data:', uploadedImageData.data); // Logs raw pixel data
                     };
                     img.src = e.target.result;
                 };
