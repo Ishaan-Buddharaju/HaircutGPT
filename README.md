@@ -7,8 +7,7 @@ A Python-based tool that identifies the shape of a human face from an input imag
 ## Table of Contents
 - [Features](#features)
 - [Requirements](#requirements)
-- [Outputs](#outputs)
-- [Hairstyle Recommendations](#hairstyle-recommendations)
+- [Functionality](#functionality)
 
 ---
 
@@ -54,6 +53,30 @@ To use this, the following Python libraries must be installed. You can install a
    Python-dotenv is used to manage environment variables (e.g., API keys, file paths).
    ```bash
    pip3 install python-dotenv
+
+---
+## Functionality
+
+### Face Shape:  
+Face Shape is identified with drawn facial landmarks on the user's face that use face ratios to identify the face shape.  
+
+<img width="549" alt="Screenshot 2025-01-13 at 11 10 42 AM" src="https://github.com/user-attachments/assets/83b051b9-23ff-4722-ac8e-d51862f06490" />
+
+**Figure 1**: Preview Image of Face Shape Identifier on Actor Adam Driver. He Was Identified as a Triangle Face Shape.
+
+### Hairstyle Recommendation:
+
+**Once the face shape is identified, the tool provides personalized hairstyle recommendations based on:**  
+
+Detected face shape.  
+
+Desired hair length (short, medium, or long).  
+
+Gender preferences.
+
+*Example:* A triangle face shape is characterized by a narrow forehead and wider jawline. The goal is to balance these proportions by adding width and volume at the top while minimizing emphasis on the jawline. This means good hairstyles would include **Textured Layers**, **Side-Parted Styles**, or **Fringes with Volume** as these hairstyles soften the pronounced forehead area and adds balance to the face.
+
+
 
 
 
