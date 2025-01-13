@@ -32,27 +32,27 @@ To use this, the following Python libraries must be installed. You can install a
 1. **OpenCV**:  
    OpenCV is used for face detection and image annotation.  
    ```bash
-   pip3 install opencv-python
+   pip install opencv-python
 2. **Dlib**:  
    Dlib provides facial landmark detection using a pre-trained shape predictor model.  
    ```bash
-   pip3 install dlib
+   pip install dlib
 3. **Scikit-learn**:  
    Scikit-learn is used for classification and clustering of face shapes  
    ```bash
-   pip3 install scikit-learn
+   pip install scikit-learn
 4. **NumPy**:  
    NumPy is used for mathematical calculations, including measurements of facial proportions.
    ```bash
-   pip3 install numpy
+   pip install numpy
 4. **OpenAI API**:  
    This allows integration with the OpenAI GPT-4 API for hairstyle recommendations.
    ```bash
-   pip3 install openai
+   pip install openai
 5. **Python-dotenv**:  
    Python-dotenv is used to manage environment variables (e.g., API keys, file paths).
    ```bash
-   pip3 install python-dotenv
+   pip install python-dotenv
 
 ---
 ## Functionality
