@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Input</title>
+    <title>Camera and Image Upload</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@
             margin: 0;
             padding: 20px;
         }
-        video, canvas {
+        video, canvas, img {
             display: block;
             margin: 20px auto;
         }
@@ -23,22 +23,31 @@
     </style>
 </head>
 <body>
-    <h1>Camera Input</h1>
+    <h1>Camera and Image Upload</h1>
     <video id="video" autoplay></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <div>
         <button id="capture">Capture Photo</button>
         <button id="download" style="display:none;">Download Photo</button>
     </div>
+    <div>
+        <h2>Or Upload an Image</h2>
+        <input type="file" id="imageUpload" accept="image/*">
+    </div>
     <script>
-        // Select HTML elements
+        //select HTML elements
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
         const downloadButton = document.getElementById('download');
+        const imageUpload = document.getElementById('imageUpload');
         const ctx = canvas.getContext('2d');
 
-        // Access the camera
+        //variables to store raw image data
+        let capturedImageData = null; //for image taken from camera
+        let uploadedImageData = null; //for image
+
+        //access the camera
         navigator.mediaDevices.getUserMedia({ video: true })
             .then((stream) => {
                 video.srcObject = stream;
@@ -47,11 +56,15 @@
                 console.error('Error accessing the camera:', err);
             });
 
-        // Capture the photo
+        //capture the photo
         captureButton.addEventListener('click', () => {
             canvas.style.display = 'block';
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             downloadButton.style.display = 'inline-block';
+
+            // Collect and store raw image data
+            capturedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            console.log('Captured Image Data:', capturedImageData.data); //logs raw pixel data
         });
 
         // Download the captured photo
@@ -60,6 +73,28 @@
             link.download = 'captured-photo.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
+        });
+
+        // Handle image upload
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.style.display = 'block';
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        downloadButton.style.display = 'inline-block';
+
+                        // Collect and store raw image data
+                        uploadedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        console.log('Uploaded Image Data:', uploadedImageData.data); // Logs raw pixel data
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 </body>
