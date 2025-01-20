@@ -1,6 +1,8 @@
-from faceShape import FaceShape
+from FaceShape import FaceShape
+from haircut_recommender import get_hairstyle_recommendations
 from dotenv import load_dotenv
 import os
+import openai
 from cv2 import imshow, waitKey, destroyAllWindows
 load_dotenv()
 
@@ -13,10 +15,13 @@ def main():
 
     face_to_classify = FaceShape(image_path, face_cascade_path, predictor_path)
     print(face_to_classify.faceShape)
+    desired_hair_length = input("Enter desired hair length: ")
+    gender = input("What is your gender? ")
+    recommendation = get_hairstyle_recommendations(face_to_classify.faceShape, desired_hair_length, gender)
+    print(recommendation)
     imshow('Face Measurements: press 0 to close', face_to_classify.measured_image)
     waitKey(0)
     destroyAllWindows()   
-
 
 if __name__ == "__main__":
     main()
