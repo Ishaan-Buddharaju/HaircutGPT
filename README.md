@@ -1,4 +1,4 @@
-# Face Shape Identifier
+# Face Shape Hairstyle Recommender
 
 A Python-based tool that identifies the shape of a human face from an input image and provides recommendations for suitable hairstyles based on the detected face shape. The program also overlays visual measurements on the image to display the calculations.
 
