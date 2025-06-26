@@ -5,16 +5,16 @@ import dlib #for detection of facial landmarks ex:nose,jawline,eyes
 from sklearn.cluster import KMeans #for clustering
 import math
 from math import degrees
-# from dotenv import load_dotenv
-# import os
+#from dotenv import load_dotenv
+#import os
 
-# load_dotenv()
+#load_dotenv()
 
 
-# # Paths
-# image_path = os.getenv('IMAGE_PATH')
-# face_cascade_path = os.getenv('FACE_CASCADE_PATH')
-# predictor_path = os.getenv('PREDICTOR_PATH')
+#paths
+# mage_path = os.getenv('IMAGE_PATH')
+#face_cascade_path = os.getenv('FACE_CASCADE_PATH')
+#predictor_path = os.getenv('PREDICTOR_PATH')
 
 class FaceShape: 
 
@@ -58,7 +58,6 @@ class FaceShape:
         for (x, y, w, h) in self.faces:
             #draw a rectangle around the faces
             cv2.rectangle(results, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            #making temporary copy
             temp = self.original.copy()
             #getting area of interest from image i.e., forehead (25% of face)
             forehead = temp[y:y + int(0.25 * h), x:x + w]
@@ -76,23 +75,19 @@ class FaceShape:
                     else:
                         forehead[i][j] = [0, 0, 0]
 
-            # Initialize the midpoint of the forehead
             forehead_mid = [int(cols / 2), int(rows / 2)]  # midpoint of forehead
             lef = 0
             rig = 0
 
-            # Get the pixel value at the midpoint
             pixel_value = forehead[forehead_mid[1], forehead_mid[0]]
 
-            # Loop for detecting the left edge
             for i in range(0, forehead_mid[0]):
-                if forehead_mid[0] - i < 0:  # Check for out-of-bounds
+                if forehead_mid[0] - i < 0: 
                     break
                 if forehead[forehead_mid[1], forehead_mid[0] - i].all() != pixel_value.all():
                     lef = forehead_mid[0] - i
                     break
 
-            # Loop for detecting the right edge
             for i in range(0, cols - forehead_mid[0]):
                 if forehead_mid[0] + i >= cols:  # Check for out-of-bounds
                     break
@@ -100,14 +95,12 @@ class FaceShape:
                     rig = forehead_mid[0] + i
                     break
 
-            # Draw line 1 on forehead with circles
             line1 = rig - lef
             cv2.line(results, (x + lef, y), (x + rig, y), color=(0, 255, 0), thickness=2)
             cv2.putText(results, 'Line 1', (x + lef, y - 10), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 255, 0), thickness=2)
             cv2.circle(results, (x + lef, y), 5, color=(255, 0, 0), thickness=-1)
             cv2.circle(results, (x + rig, y), 5, color=(255, 0, 0), thickness=-1)
 
-            # Draw line 2 with circles
             linepointleft = (landmarks[1, 0], landmarks[1, 1])
             linepointright = (landmarks[15, 0], landmarks[15, 1])
             line2 = np.linalg.norm(np.subtract(linepointright, linepointleft))
@@ -116,7 +109,6 @@ class FaceShape:
             cv2.circle(results, linepointleft, 5, color=(255, 0, 0), thickness=-1)
             cv2.circle(results, linepointright, 5, color=(255, 0, 0), thickness=-1)
 
-            # Draw line 3 with circles
             linepointleft = (landmarks[3, 0], landmarks[3, 1])
             linepointright = (landmarks[13, 0], landmarks[13, 1])
             line3 = np.linalg.norm(np.subtract(linepointright, linepointleft))
@@ -125,7 +117,6 @@ class FaceShape:
             cv2.circle(results, linepointleft, 5, color=(255, 0, 0), thickness=-1)
             cv2.circle(results, linepointright, 5, color=(255, 0, 0), thickness=-1)
 
-            # Draw line 4 with circles
             linepointbottom = (landmarks[8, 0], landmarks[8, 1])
             linepointtop = (landmarks[8, 0], y)
             line4 = abs(landmarks[8, 1] - y)
@@ -137,7 +128,7 @@ class FaceShape:
             similarity = np.std([line1, line2, line3])
             ovalsimilarity = np.std([line2, line4])
 
-            # Calculate angle for jawline
+            #calc angle for jawline
             ax, ay = landmarks[3, 0], landmarks[3, 1]
             bx, by = landmarks[4, 0], landmarks[4, 1]
             cx, cy = landmarks[5, 0], landmarks[5, 1]
@@ -148,7 +139,7 @@ class FaceShape:
             angle = abs(degrees(alpha))
             angle = 180 - angle
             
-        # Determine face shape based on calculated metricsfor i inrange(1):
+        #determine face shape based on calculated metrics
             if similarity < 10:
                 if angle < 160:
                     #print('Squared shape') #Jawlines are more angular
@@ -181,6 +172,6 @@ class FaceShape:
                 faceShape = 'Unable to determine shape'
         #returns string faceShape and resulting image 
         #results can be shown with cv2.imshow('Face Shape', results)
-        # self.faceShape = faceShape
-        # self.measured_image = results
+        #self.faceShape = faceShape
+        #self.measured_image = results
         return faceShape, results     
