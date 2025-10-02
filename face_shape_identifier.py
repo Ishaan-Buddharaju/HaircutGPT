@@ -15,27 +15,23 @@ image_path = os.getenv('IMAGE_PATH')
 face_cascade_path = os.getenv('FACE_CASCADE_PATH')
 predictor_path = os.getenv('PREDICTOR_PATH')
 
-#create the haar cascade for detecting face and smile
+#make haar cascade for detecting face and smile
 faceCascade = cv2.CascadeClassifier(face_cascade_path)
 
-#create the landmark predictor
+#facial landmark predictor
 predictor = dlib.shape_predictor(predictor_path)
 
-#read the image
 image = cv2.imread(image_path)
-
-#resizing the image to 500x500
 image = cv2.resize(image, (500, 500)) 
-#making another copy
 original = image.copy()
 
-#convert the image to grayscale
+#convert to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-#apply a Gaussian blur with a 3 x 3 kernel to help remove high frequency noise
+#Gaussian blur with a 3 x 3 kernel to help remove high frequency noise
 gauss = cv2.GaussianBlur(gray, (3, 3), 0)
 
-#detect faces in the image
+
 faces = faceCascade.detectMultiScale(
     gauss,
     scaleFactor=1.05,
@@ -43,18 +39,16 @@ faces = faceCascade.detectMultiScale(
     minSize=(100, 100),
     flags=cv2.CASCADE_SCALE_IMAGE
     )
-#detect faces in the image
 print("found {0} faces!".format(len(faces)))
 
 for (x, y, w, h) in faces:
-    #draw a rectangle around the faces
+    #rect around face
     cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    #converting the opencv rectangle coordinates to Dlib rectangle
+    #convert opencv rect coords to Dlib rectangle
     dlib_rect = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
     detected_landmarks = predictor(image, dlib_rect).parts()
     landmarks = np.matrix([[p.x, p.y] for p in detected_landmarks])
     
-#making another copy for showing final results
 results = original.copy()
 
 for (x, y, w, h) in faces:
@@ -65,7 +59,7 @@ for (x, y, w, h) in faces:
     rows, cols, bands = forehead.shape
     X = forehead.reshape(rows * cols, bands)
 
-    #kmeans to seperate hair from face
+    #seperate hair from face
     kmeans = KMeans(n_clusters=2, init='k-means++', max_iter=300, n_init=10, random_state=0)
     y_kmeans = kmeans.fit_predict(X)
 
@@ -90,7 +84,7 @@ for (x, y, w, h) in faces:
             break
 
     for i in range(0, cols - forehead_mid[0]):
-        if forehead_mid[0] + i >= cols:  # Check for out-of-bounds
+        if forehead_mid[0] + i >= cols: 
             break
         if forehead[forehead_mid[1], forehead_mid[0] + i].all() != pixel_value.all():
             rig = forehead_mid[0] + i

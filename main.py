@@ -8,7 +8,6 @@ load_dotenv()
 
 
 def main():
-    # Paths
     image_path = os.getenv('IMAGE_PATH')
     face_cascade_path = os.getenv('FACE_CASCADE_PATH')
     predictor_path = os.getenv('PREDICTOR_PATH')

@@ -1,18 +1,16 @@
-#importing the libraries
-import numpy as np #for mathematical calculations
-import cv2 #for face detection and other image operations
-import dlib #for detection of facial landmarks ex:nose,jawline,eyes
-from sklearn.cluster import KMeans #for clustering
+import numpy as np 
+import cv2 
+import dlib 
+from sklearn.cluster import KMeans 
 import math
 from math import degrees
 #from dotenv import load_dotenv
 #import os
-
 #load_dotenv()
 
 
 #paths
-# mage_path = os.getenv('IMAGE_PATH')
+#image_path = os.getenv('IMAGE_PATH')
 #face_cascade_path = os.getenv('FACE_CASCADE_PATH')
 #predictor_path = os.getenv('PREDICTOR_PATH')
 
@@ -43,28 +41,20 @@ class FaceShape:
     
     def _classify_face_shape(self):
         for (x, y, w, h) in self.faces:
-            #draw a rectangle around the faces
             cv2.rectangle(self.image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            #converting the opencv rectangle coordinates to Dlib rectangle
             dlib_rect = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
-            #detecting landmarks
             detected_landmarks = self.predictor(self.image, dlib_rect).parts()
-            #converting to np matrix
             landmarks = np.matrix([[p.x, p.y] for p in detected_landmarks])
-    
-        #making another copy for showing final results
         results = self.original.copy()
 
         for (x, y, w, h) in self.faces:
-            #draw a rectangle around the faces
             cv2.rectangle(results, (x, y), (x + w, y + h), (0, 255, 0), 2)
             temp = self.original.copy()
-            #getting area of interest from image i.e., forehead (25% of face)
             forehead = temp[y:y + int(0.25 * h), x:x + w]
             rows, cols, bands = forehead.shape
             X = forehead.reshape(rows * cols, bands)
 
-            #kmeans clustering with 2 clusters (for hair and skin)
+            #kmeans clustering with 2 clusters (hair and skin)
             kmeans = KMeans(n_clusters=2, init='k-means++', max_iter=300, n_init=10, random_state=0)
             y_kmeans = kmeans.fit_predict(X)
 
@@ -75,7 +65,7 @@ class FaceShape:
                     else:
                         forehead[i][j] = [0, 0, 0]
 
-            forehead_mid = [int(cols / 2), int(rows / 2)]  # midpoint of forehead
+            forehead_mid = [int(cols / 2), int(rows / 2)]
             lef = 0
             rig = 0
 
@@ -89,7 +79,7 @@ class FaceShape:
                     break
 
             for i in range(0, cols - forehead_mid[0]):
-                if forehead_mid[0] + i >= cols:  # Check for out-of-bounds
+                if forehead_mid[0] + i >= cols:
                     break
                 if forehead[forehead_mid[1], forehead_mid[0] + i].all() != pixel_value.all():
                     rig = forehead_mid[0] + i
@@ -128,7 +118,7 @@ class FaceShape:
             similarity = np.std([line1, line2, line3])
             ovalsimilarity = np.std([line2, line4])
 
-            #calc angle for jawline
+            #jawline angle
             ax, ay = landmarks[3, 0], landmarks[3, 1]
             bx, by = landmarks[4, 0], landmarks[4, 1]
             cx, cy = landmarks[5, 0], landmarks[5, 1]
@@ -139,7 +129,6 @@ class FaceShape:
             angle = abs(degrees(alpha))
             angle = 180 - angle
             
-        #determine face shape based on calculated metrics
             if similarity < 10:
                 if angle < 160:
                     #print('Squared shape') #Jawlines are more angular
@@ -170,7 +159,7 @@ class FaceShape:
                 break
             else:
                 faceShape = 'Unable to determine shape'
-        #returns string faceShape and resulting image 
+       
         #results can be shown with cv2.imshow('Face Shape', results)
         #self.faceShape = faceShape
         #self.measured_image = results

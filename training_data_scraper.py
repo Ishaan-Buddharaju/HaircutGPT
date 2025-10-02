@@ -39,10 +39,10 @@ def count_faces(image, face_cascade):
 def download_image(folder_name, url, file_name):   #function to download an image provided the directory, img url, and desired file name 
     try:
         image_content = requests.get(url).content
-        image_file = io.BytesIO(image_content)    #takes content and converts to bytes
+        image_file = io.BytesIO(image_content)   
         image = Image.open(image_file)              
         file_path = os.path.join(folder_name, file_name)   
-        image.save(file_path, "JPEG")               #saves image at path as JPG
+        image.save(file_path, "JPEG")              
         print("Success")
 
         return (file_path)
@@ -54,20 +54,20 @@ def download_image(folder_name, url, file_name):   #function to download an imag
 if __name__ == '__main__':
 
     wd = webdriver.Chrome(DRIVER_PATH)       #initialize webdriver
-    celebs = pd.read_csv("celebrities.csv")['Celebrity']  #read in celeb csv and column with celeb names
+    celebs = pd.read_csv("celebrities.csv")['Celebrity']  
     face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")  #read face cascade once to be used to count faces
     for name in celebs:            
         name = name.replace(" ", "+")    #replace spaces with "+" for search format
         search_url = f"https://www.google.co.in/search?q={name}&source=lnms&tbm=isch"
         wd.get(search_url)
-        image_links = get_images(wd)        #list of image links
-        create_folder(f"{name}")            #create folder of celeb name to download images into
-        create_folder(f"{name}/{name}-omitted")    #create folder for omitted images (improper downloads or more than one face)
-        for idx, link in enumerate(image_links):     #iterates through list of links and downloads images
+        image_links = get_images(wd)       
+        create_folder(f"{name}")           
+        create_folder(f"{name}/{name}-omitted")   
+        for idx, link in enumerate(image_links):     
             downloaded_path = download_image(f"{name}", link, f'{name}_{idx}.jpg')
             if downloaded_path is not False:
                 if count_faces(cv2.imread(downloaded_path), face_cascade) != 1:
-                    shutil.move(downloaded_path, f"{name}/{name}-omitted")  #move the unwanted image into the omitted folder
+                    shutil.move(downloaded_path, f"{name}/{name}-omitted")  #move unwanted image into the omitted folder
                     print(f"moved {name}_{idx}")
 
     print("\n\n\nDone!")
